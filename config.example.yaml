@@ -1,0 +1,71 @@
+# Dispatch - the ONLY file you need to fill in.
+# Copy to config.yaml, fill the values, then: docker compose up -d
+# Keep this file private (it holds your tokens). It is gitignored.
+
+anthropic:
+  api_key: ""            # console.anthropic.com -> API keys   (or use oauth_token below)
+  oauth_token: ""        # optional: from `claude setup-token` (uses your Claude subscription)
+
+discord:
+  bot_token: ""          # discord.com/developers -> your app -> Bot -> Reset Token
+  channel_id: ""         # right-click the control channel -> Copy Channel ID (enable Developer Mode)
+  owner_user_id: ""      # right-click yourself -> Copy User ID. Only this user can command the agents.
+
+github:
+  token: ""              # fine-grained PAT: repo create + contents + workflows (all repos you own)
+  owner: ""              # your GitHub username or org
+
+vercel:
+  token: ""              # vercel.com/account/tokens
+  team_id: ""            # optional: team slug/id; empty = personal account
+
+supabase:
+  access_token: ""       # supabase.com/dashboard/account/tokens
+  org_id: ""             # dashboard -> Organization settings -> slug/ID
+  region: us-east-1
+
+git:                     # who commits are authored as - Vercel only deploys commits by a member of your account
+  author_name: ""        # e.g. your GitHub username
+  author_email: ""       # the email you log into Vercel with (recommended)
+
+# Optional integrations the agents may use when a product needs them
+stripe:
+  secret_key: ""         # use a TEST key (sk_test_...) unless you want real charges
+aws:
+  access_key_id: ""
+  secret_access_key: ""
+  region: ""
+extra_env: {}            # optional for nicer visuals: UNSPLASH_ACCESS_KEY, PEXELS_API_KEY (free). Product API keys (Stripe, Resend, Mux, ...). Hot-reloaded; see examples/*/LAUNCH.md
+
+harness:
+  autonomy: ""                    # "full" = no plan "go", auto-next milestone, ship after QA; overrides the 3 switches below
+  project_budget_usd: 50          # hard cap per project (raise later with /budget)
+  task_budget_usd: 8              # cap for a single agent run
+  max_parallel_agents: auto       # auto = sized from this machine's RAM/CPUs (or a fixed number)
+  max_qa_rounds: 3
+  progress_update_minutes: 20     # automatic progress post in the thread while building (0 = off)
+  auto_continue_milestones: false # true = run every milestone of a spec without waiting for "next"
+  playbook_learning: true         # after each build, a retro adds lessons to data/playbook.md
+  plan_budget_usd: 4
+  consult_budget_usd: 1.5
+  web_research: true              # stuck tasks get a researcher agent that searches docs/issues and cites sources
+  research_budget_usd: 1.0
+  designer: true                  # designer agent: creates the visual design system, then reviews screenshots before QA
+  browser: true                   # headless browser tool (Playwright) for JS-heavy docs and checking deployed apps
+  auto_approve_plan: false        # true = start building without waiting for your "go"
+  plan_approval_timeout_hours: 12
+  start_if_no_plan_reply: true    # build anyway if you don't answer the plan in time
+  owner_reply_timeout_hours: 12   # how long agents wait for your answers before using best judgement
+  release_approval: true          # after QA: post preview link + QA result, wait for "ship" before production
+  release_approval_timeout_hours: 24
+  release_if_no_reply: false      # true = ship anyway if you don't answer in time
+  require_approval_for_production_deploy: false
+  extra_gated_patterns: []        # regexes of shell commands that need your yes/no on Discord
+  run_timeout_minutes: 45
+  max_turns_per_run: 80
+  models:                         # aliases: opus | sonnet | haiku (or full model ids)
+    default: sonnet
+    architect: opus
+    debugger: opus
+  workspace_dir: ./data/workspaces
+  db_path: ./data/harness.db

@@ -1,0 +1,11 @@
+services:
+  dispatch:
+    build: .
+    container_name: dispatch
+    command: ["python", "-m", "harness", "--config", "/app/host/config.yaml"]
+    restart: unless-stopped
+    volumes:
+      - ./:/app/host:ro              # folder mount (not a single file) so config.yaml edits apply live
+      - ./data:/app/data            # state DB + project workspaces survive restarts
+    environment:
+      - LOG_LEVEL=INFO

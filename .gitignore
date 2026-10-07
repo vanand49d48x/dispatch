@@ -1,0 +1,9 @@
+*.pyc
+*.zip
+.DS_Store
+.env*
+.venv/
+__pycache__/
+config.yaml
+data/
+secrets.env
